@@ -5,16 +5,26 @@ import 'package:meals_app/screens/meals.dart';
 import 'package:meals_app/widgets/category_grid_item.dart';
 
 import '../models/meal.dart';
+import 'filters.dart';
 
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen(
-      {super.key, required this.onToggleFavorite, required this.favoriteMeals});
+      {super.key,
+      required this.onToggleFavorite,
+      required this.favoriteMeals,
+      required this.filters});
   final void Function(Meal meal) onToggleFavorite;
   final List<Meal> favoriteMeals;
+  final Map<Filter, bool> filters;
 
   void _selectCategory(BuildContext context, Category category) {
     final categoryMeals = dummyMeals
-        .where((meal) => meal.categories.contains(category.id))
+        .where((meal) =>
+            meal.categories.contains(category.id) &&
+            (meal.isGlutenFree || !filters[Filter.glutenFree]!) &&
+            (meal.isLactoseFree || !filters[Filter.lactoseFree]!) &&
+            (meal.isVegetarian || !filters[Filter.vegetarian]!) &&
+            (meal.isVegan || !filters[Filter.vegan]!))
         .toList();
     Navigator.push(
       context,

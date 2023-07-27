@@ -6,6 +6,13 @@ import 'package:meals_app/widgets/main_drawer.dart';
 
 import '../models/meal.dart';
 
+const kInitialFilters = {
+  Filter.glutenFree: false,
+  Filter.lactoseFree: false,
+  Filter.vegetarian: false,
+  Filter.vegan: false
+};
+
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
 
@@ -16,6 +23,7 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   int _selectedPageIndex = 0;
   final List<Meal> _favoriteMeals = [];
+  Map<Filter, bool> filters = kInitialFilters;
 
   void _toggleFavoriteStatus(Meal meal) {
     final isExisting = _favoriteMeals.contains(meal);
@@ -36,11 +44,20 @@ class _TabsScreenState extends State<TabsScreen> {
     });
   }
 
-  void _setScreen(String identifier) {
+  void _setScreen(String identifier) async {
     Navigator.pop(context);
     if (identifier == 'filters') {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (ctx) => const FiltersScreen()));
+      final result = await Navigator.push<Map<Filter, bool>>(
+        context,
+        MaterialPageRoute(
+          builder: (ctx) => FiltersScreen(
+            choosenFilters: filters,
+          ),
+        ),
+      );
+      setState(() {
+        filters = result ?? kInitialFilters;
+      });
     }
   }
 
@@ -49,6 +66,7 @@ class _TabsScreenState extends State<TabsScreen> {
     Widget activeScreen = CategoriesScreen(
       onToggleFavorite: _toggleFavoriteStatus,
       favoriteMeals: _favoriteMeals,
+      filters: filters,
     );
     var activePageTitle = 'Categories';
     if (_selectedPageIndex == 1) {
