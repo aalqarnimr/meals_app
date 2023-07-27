@@ -38,58 +38,56 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
           )
         ],
       ),
-      body: Container(
-        margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Image.network(
-                widget.meal.imageUrl,
-                height: 300,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-              const SizedBox(height: 14),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(top: 20),
+        child: Column(
+          children: [
+            Image.network(
+              widget.meal.imageUrl,
+              height: 300,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(height: 14),
+            Text(
+              'Ingredients',
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            const SizedBox(height: 14),
+            for (final ingredient in widget.meal.ingredients)
               Text(
-                'Ingredients',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
+                ingredient,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground,
                     ),
               ),
-              const SizedBox(height: 14),
-              for (final ingredient in widget.meal.ingredients)
-                Text(
-                  ingredient,
+            const SizedBox(height: 24),
+            Text(
+              'Steps',
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            const SizedBox(height: 14),
+            for (final step in widget.meal.steps)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                child: Text(
+                  '•   $step',
+                  textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Theme.of(context).colorScheme.onBackground,
                       ),
                 ),
-              const SizedBox(height: 24),
-              Text(
-                'Steps',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
               ),
-              const SizedBox(height: 14),
-              for (final step in widget.meal.steps)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  child: Text(
-                    '•   $step',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground,
-                        ),
-                  ),
-                ),
-            ],
-          ),
+          ],
         ),
       ),
     );
