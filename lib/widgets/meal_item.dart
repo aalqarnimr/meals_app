@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:meals_app/widgets/meal_item_trait.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/meal.dart';
 
 class MealItem extends StatelessWidget {
-  const MealItem(this.meal, {super.key});
+  const MealItem(this.meal, {super.key, required this.onChooseMeal});
   final Meal meal;
+  final void Function(BuildContext, Meal) onChooseMeal;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,9 @@ class MealItem extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       elevation: 2,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          onChooseMeal(context, meal);
+        },
         splashColor: Colors.white,
         child: Stack(
           children: [
@@ -56,7 +60,25 @@ class MealItem extends StatelessWidget {
                       height: 12,
                     ),
                     Row(
-                      children: [],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        MealItemTrait(
+                          icon: Icons.schedule,
+                          label: '${meal.duration} min',
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        MealItemTrait(
+                            icon: Icons.work,
+                            label: meal.complexity.name.capitalize()),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        MealItemTrait(
+                            icon: Icons.attach_money,
+                            label: meal.affordability.name.capitalize()),
+                      ],
                     ),
                   ],
                 ),
