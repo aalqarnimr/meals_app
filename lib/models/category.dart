@@ -7,4 +7,14 @@ class Category {
   final String title;
   final String id;
   final Color color;
+
+  // List<Meal> findMeals(List<Meal> allMeals) {
+  //   List<Meal> categoryMeals = [];
+  //   for (final meal in allMeals) {
+  //     if (meal.categories.contains(id)) {
+  //       categoryMeals.add(meal);
+  //     }
+  //   }
+  //   return categoryMeals;
+  // }
 }
