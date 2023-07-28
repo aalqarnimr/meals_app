@@ -19,6 +19,10 @@ class MealDetailsScreen extends StatefulWidget {
 class _MealDetailsScreenState extends State<MealDetailsScreen> {
   @override
   Widget build(BuildContext context) {
+    bool isInFavorite = widget.favoriteMeals
+        .where((favoriteMeal) => favoriteMeal.id == widget.meal.id)
+        .toList()
+        .isNotEmpty;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.meal.title),
@@ -29,7 +33,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                 widget.onToggleFavorite(widget.meal);
               });
             },
-            icon: widget.favoriteMeals.contains(widget.meal)
+            icon: isInFavorite
                 ? const Icon(
                     Icons.star,
                     color: Colors.yellow,
@@ -39,7 +43,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.only(top: 20),
         child: Column(
           children: [
             Image.network(

@@ -1,3 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'meal.g.dart';
+
 enum Complexity {
   simple,
   challenging,
@@ -10,7 +14,8 @@ enum Affordability {
   luxurious,
 }
 
-class Meal {
+@JsonSerializable()
+class Meal{
   const Meal({
     required this.id,
     required this.categories,
@@ -40,4 +45,7 @@ class Meal {
   final bool isLactoseFree;
   final bool isVegan;
   final bool isVegetarian;
+
+  factory Meal.fromJson(Map<String, dynamic> json) => _$MealFromJson(json);
+  Map<String, dynamic> toJson() => _$MealToJson(this);
 }

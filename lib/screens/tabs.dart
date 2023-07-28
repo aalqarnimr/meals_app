@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:meals_app/screens/categories.dart';
 import 'package:meals_app/screens/filters.dart';
 import 'package:meals_app/screens/meals.dart';
 import 'package:meals_app/widgets/main_drawer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 import '../models/meal.dart';
 
@@ -26,17 +27,44 @@ class _TabsScreenState extends State<TabsScreen> {
   final List<Meal> _favoriteMeals = [];
   Map<Filter, bool> filters = kInitialFilters;
 
-  void _toggleFavoriteStatus(Meal meal) {
-    final isExisting = _favoriteMeals.contains(meal);
+  @override
+  void initState() {
+    super.initState();
+    print('reached');
+    _loadMeals();
+  }
+
+  Future<void> _loadMeals() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      String encodedMealsString = (prefs.getString('favoriteMeals') ?? '[]');
+      final List<dynamic> decodedMeals = json.decode(encodedMealsString);
+      for (final meal in decodedMeals) {
+        _favoriteMeals.add(Meal.fromJson(meal));
+      }
+    });
+  }
+
+  void _toggleFavoriteStatus(Meal meal) async {
+    final isExisting = _favoriteMeals
+        .where((favoriteMeal) => favoriteMeal.id == meal.id)
+        .isNotEmpty;
+    final prefs = await SharedPreferences.getInstance();
     if (isExisting) {
       setState(() {
-        _favoriteMeals.remove(meal);
+        final itemMeal = _favoriteMeals
+            .where((favoriteMeal) => favoriteMeal.id == meal.id)
+            .toList()[0];
+        print(itemMeal);
+        _favoriteMeals.remove(itemMeal);
       });
     } else {
       setState(() {
         _favoriteMeals.add(meal);
       });
     }
+    String strJsonString = json.encode(_favoriteMeals);
+    prefs.setString('favoriteMeals', strJsonString);
   }
 
   void _selectPage(int index) {
